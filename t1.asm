@@ -1,32 +1,32 @@
-g: dword 4 // int g = 4
+.686                                ; create 32 bit code
+.model flat, C                      ; 32 bit memory model
+ option casemap:none                ; case sensitive
 
-// int min (int a, int b, int c)
+ .data
 
-push 3		//push immediate values
-push 2
-push 1
-call min
-add esp, 12
+public g
+g dword 4
 
+.code
 
+public min
 
-//function body of min
 min:	push ebp
 		mov ebp, esp
-		sub esp, 4	//allocate space for one local v
+		sub esp, 4	
 
-		mov eax, [ebp+8] // eax = a
-		mov [ebp-4], eax // v = a
-		mov eax, [ebp+12] // eax = b
-		cmp eax, [ebp-4]  // if (b < v)
+		mov eax, [ebp+8] 
+		mov [ebp-4], eax 
+		mov eax, [ebp+12] 
+		cmp eax, [ebp-4]  
 		jge min1
-		mov eax, [ebp+12]		// v = b
+		mov eax, [ebp+12]		
 		mov [ebp-4], eax
 min1:
-		mov eax, [ebp+16] 	 // eax = c
-		cmp eax, [ebp-4]	 // if(c < v)
+		mov eax, [ebp+16] 	 
+		cmp eax, [ebp-4]	 
 		jge min2
-		mov eax, [ebp+16]     //v = c
+		mov eax, [ebp+16]    
 		mov [ebp-4], eax
 min2:
 		mov eax, [ebp-4]
@@ -34,20 +34,19 @@ min2:
 		pop ebp
 		ret
 
+public p
 
-
-//function body of pop
 p:	push ebp
 	mov ebp, esp
 	sub esp, 4
 
 	mov eax, [ebp+12]
-	push eax		//push j
+	push eax		
 	mov eax, [ebp+8]
-	push eax		//push i
-	mov eax, [g]	//int g
-	push eax 		//push g
-	call min		// min(g,i,j)
+	push eax		
+	mov eax, [g]	
+	push eax 		
+	call min	
 	add esp, 12
 	mov [ebp-4], eax
 	mov eax, [ebp-4]
@@ -56,30 +55,16 @@ p:	push ebp
 	pop ebp
 	ret
 
+public gcd
 
-//function of body gcd
 gcd:	push ebp
 		mov ebp, esp
 
-		mov eax, [ebp+12] // eax = b
-		cmp eax, 0		  // b == 0
-		jne else
-		mov eax, [ebp+8]  //return a
-		mov esp, ebp
-		pop ebp
-		ret
 
-else:	mov eax, [ebp+12]
-		push eax	//push b
-		mov ecx, eax // ecx = b
-		idiv ecx
-		mov eax, edx  // a mod b
-		push eax
-		call gcd	//gcd(b, a mod b)
-		add esp, 8
 
 		mov esp, ebp
 		pop ebp
 		ret
 
-//max depth of stack is 2 in stack frames
+
+end
