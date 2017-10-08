@@ -59,9 +59,29 @@ public gcd
 
 gcd:	push ebp
 		mov ebp, esp
+		sub esp, 4
 
+		mov eax, [ebp+12]
+		mov ebx, 0
+		cmp eax, ebx
+		je end1
+				
+		mov eax, [ebp+8]
+		mov ecx, [ebp+12]
+		mov edx, 0
+		cdq
+		idiv ecx
+		mov eax, edx
+		push eax
+		mov eax, [ebp+12]
+		push eax
+		call gcd
+		add esp, 8
+		jmp end2
 
-
+end1:	
+		mov eax, [ebp+8]
+end2:
 		mov esp, ebp
 		pop ebp
 		ret
